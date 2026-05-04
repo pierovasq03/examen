@@ -1,9 +1,16 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs'); 
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../public/uploads'));
+    const dest = path.join(__dirname, '../public/uploads');
+
+    if (!fs.existsSync(dest)) {
+      fs.mkdirSync(dest, { recursive: true });
+    }
+
+    cb(null, dest);
   },
   filename: (req, file, cb) => {
     cb(null, 'plato-' + Date.now() + path.extname(file.originalname));
