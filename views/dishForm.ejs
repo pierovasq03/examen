@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; width: 450px;}
+    h1 { color: #333; }
+    .form-group { margin-top: 15px; }
+    label { display: block; }
+    input[type="text"], input[type="number"], input[type="file"] { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+    .current-img { width: 100px; height: 100px; object-fit: cover; margin-top: 10px; border-radius: 4px; display: block;}
+    button { margin-top: 25px; padding: 10px 15px; background-color: #333; color: white; border: none; border-radius: 4px; cursor: pointer;}
+    .btn-back { display: inline-block; margin-top: 20px; color: #555; }
+  </style>
+</head>
+<body>
+  <h1><%= title %> - <%= restaurant.nombre %></h1>
+  
+  <form action="<%= mode === 'add' ? '/restaurants/' + restaurant.id_restaurante + '/dishes/add' : '/dishes/update/' + dish.id_plato %>" method="POST" enctype="multipart/form-data">
+    
+    <input type="hidden" name="id_restaurante" value="<%= restaurant.id_restaurante %>">
+
+    <div class="form-group">
+      <label for="nombre">Nombre del Plato:</label>
+      <input type="text" id="nombre" name="nombre" value="<%= dish ? dish.nombre : '' %>" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="precio">Precio:</label>
+      <input type="number" id="precio" name="precio" step="0.01" value="<%= dish ? dish.precio : '' %>" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="imagen">Imagen del Plato (JPG/PNG):</label>
+      <input type="file" id="imagen" name="imagen"> <!-- El 'name' debe ser 'imagen' -->
+      
+      <% if (dish && dish.imagen) { %>
+        <div>Imagen actual:</div>
+        <img src="/uploads/<%= dish.imagen %>" class="current-img">
+      <% } %>
+    </div>
+    
+    <button type="submit"><%= mode === 'add' ? 'Crear Plato' : 'Actualizar Plato' %></button>
+  </form>
+  
+  <a href="/restaurants/<%= restaurant.id_restaurante %>/dishes" class="btn-back">← Volver a los platos</a>
+</body>
+</html>
